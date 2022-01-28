@@ -19,7 +19,7 @@ services:
     container_name: webserver1
     restart: unless-stopped
     ports:
-      - "8088:80"
+      - "8082:80"
     volumes:
       - ./:/var/www
       - ./config/nginx/:/etc/nginx/conf.d/
