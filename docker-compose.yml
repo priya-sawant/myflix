@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: myflixapp
-    container_name: app
+    container_name: app1
     restart: unless-stopped
     volumes:
       - ./:/var/www
@@ -16,7 +16,7 @@ services:
       context: .
       dockerfile: Dockerfile_nginx
     image: nginx
-    container_name: webserver
+    container_name: webserver1
     restart: unless-stopped
     ports:
       - "8088:80"
@@ -24,13 +24,13 @@ services:
       - ./:/var/www
       - ./config/nginx/:/etc/nginx/conf.d/
     depends_on:
-      - app
+      - app1
     links:
       - db
 
   db:
     image: mysql
-    container_name: db
+    container_name: db1
     environment:
       MYSQL_DATABASE: myflix
       MYSQL_ROOT_PASSWORD: root
@@ -41,7 +41,7 @@ services:
 
 
   phpmyadmin:
-    container_name: phpmyadmin1
+    container_name: phpmyadmin2
     image: phpmyadmin/phpmyadmin:latest
     ports:
       - "8080:80"
