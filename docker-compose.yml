@@ -1,0 +1,57 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: myflixapp
+    container_name: app
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www
+
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    image: nginx
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "8088:80"
+    volumes:
+      - ./:/var/www
+      - ./config/nginx/:/etc/nginx/conf.d/
+    depends_on:
+      - app
+    links:
+      - db
+
+  db:
+    image: mysql
+    container_name: db
+    environment:
+      MYSQL_DATABASE: myflix
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+
+  phpmyadmin:
+    container_name: phpmyadmin1
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - "8080:80"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+volumes:
+  dbdata:
+    driver: local
+
+  
